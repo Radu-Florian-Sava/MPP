@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Proiect1ClientServer.iml" filepath="$PROJECT_DIR$/.idea/Proiect1ClientServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ProjectClientFx/Proiect1ClientServer.ProjectClientFx.iml" filepath="$PROJECT_DIR$/.idea/modules/ProjectClientFx/Proiect1ClientServer.ProjectClientFx.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ProjectClientFx/Proiect1ClientServer.ProjectClientFx.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ProjectClientFx/Proiect1ClientServer.ProjectClientFx.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ProjectClientFx/Proiect1ClientServer.ProjectClientFx.test.iml" filepath="$PROJECT_DIR$/.idea/modules/ProjectClientFx/Proiect1ClientServer.ProjectClientFx.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ProjectModel/Proiect1ClientServer.ProjectModel.iml" filepath="$PROJECT_DIR$/.idea/modules/ProjectModel/Proiect1ClientServer.ProjectModel.iml" />

@@ -67,7 +67,9 @@ public class StartRpcClientFX extends Application {
         primaryStage.show();
 
     }
-
+    public static void main(String[] args) {
+        Application.launch(StartRpcClientFX.class);
+    }
 
 }
 
