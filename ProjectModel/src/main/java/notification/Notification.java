@@ -1,25 +1,70 @@
 package notification;
 
-import model.Flight;
+import java.io.Serializable;
 
-public class Notification {
+public class Notification implements Serializable {
     private NotificationType type;
-    private Flight flight;
+    private int ID;
+    private String destination;
+    private String randomNumbers;
+    private String airport;
+    private int numberOfTickets;
 
+    public Notification(NotificationType type, int ID, String destination, String randomNumbers, String airport, int numberOfTickets) {
+        this.type = type;
+        this.ID = ID;
+        this.destination = destination;
+        this.randomNumbers = randomNumbers;
+        this.airport = airport;
+        this.numberOfTickets = numberOfTickets;
+    }
 
     public Notification() {
     }
 
     public Notification(NotificationType type) {
-
         this.type = type;
     }
 
-    public Notification(NotificationType type, Flight flight) {
-        this.type = type;
-        this.flight = flight;
+    public int getID() {
+        return ID;
     }
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getRandomNumbers() {
+        return randomNumbers;
+    }
+
+    public void setRandomNumbers(String randomNumbers) {
+        this.randomNumbers = randomNumbers;
+    }
+
+    public String getAirport() {
+        return airport;
+    }
+
+    public void setAirport(String airport) {
+        this.airport = airport;
+    }
+
+    public int getNumberOfTickets() {
+        return numberOfTickets;
+    }
+
+    public void setNumberOfTickets(int numberOfTickets) {
+        this.numberOfTickets = numberOfTickets;
+    }
 
     public NotificationType getType() {
         return type;
@@ -29,19 +74,23 @@ public class Notification {
         this.type = type;
     }
 
-    public Flight getFlight() {
-        return flight;
-    }
-
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setFlight(int ID, String destination, String randomNumbers, String airport, int numberOfTickets) {
+        this.ID = ID;
+        this.destination = destination;
+        this.randomNumbers = randomNumbers;
+        this.airport = airport;
+        this.numberOfTickets = numberOfTickets;
     }
 
     @Override
     public String toString() {
-        return "Notification{ " +
+        return "Notification{" +
                 "type=" + type +
-                ", user=" + flight.toString() +
+                ", ID=" + ID +
+                ", destination='" + destination + '\'' +
+                ", randomNumbers='" + randomNumbers + '\'' +
+                ", airport='" + airport + '\'' +
+                ", numberOfTickets=" + numberOfTickets +
                 '}';
     }
 }

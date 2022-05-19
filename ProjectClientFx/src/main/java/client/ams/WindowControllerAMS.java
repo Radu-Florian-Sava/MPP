@@ -13,11 +13,15 @@ import javafx.scene.input.MouseEvent;
 import model.Admin;
 import model.Flight;
 import notification.Notification;
-import services.*;
+import services.IServicesAMS;
+import services.NotificationReceiver;
+import services.NotificationSubscriber;
+import services.ProjectException;
 
 import javax.swing.*;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,69 +30,51 @@ public class WindowControllerAMS implements Initializable, NotificationSubscribe
     private IServicesAMS server;
     private Admin admin;
     private NotificationReceiver receiver;
-
-    public void setReceiver(NotificationReceiver receiver) {
-        this.receiver = receiver;
-    }
-
+    private FlightsListModel flightModel;
     @FXML
     private TableView<Flight> flightTable;
     @FXML
     private TableColumn<Flight, String> destinationColumn;
-
     @FXML
     private TableColumn<Flight, String> departureDateColumn;
-
     @FXML
     private TableColumn<Flight, String> departureTimeColumn;
-
     @FXML
     private TableColumn<Flight, String> numberOfTicketsColumn;
-
     @FXML
     private TextField destinationSearchBox;
-
     @FXML
     private DatePicker datePicker;
-
     @FXML
     private TableView<Flight> searchTable;
-
     @FXML
     private TableColumn<Flight, String> searchHour;
-
     @FXML
     private TableColumn<Flight, String> searchNumberOfTickets;
-
     @FXML
     private TextField destinationTextField;
-
     @FXML
     private TextField airportTextField;
-
     @FXML
     private TextField dateTimeTextField;
-
     @FXML
     private TextField numberOfTicketsTextField;
-
     @FXML
     private ComboBox<String> clientComboBox;
-
     @FXML
     private Spinner<Integer> noSeatsSpinner;
-
     @FXML
     private TextField clientAddressTextField;
-
     @FXML
     private ListView<String> touristNamesList;
-
     @FXML
     private Button addTouristButton;
-
     @FXML
     private TextField touristNameTextField;
+
+    public void setReceiver(NotificationReceiver receiver) {
+        this.receiver = receiver;
+    }
 
     public void setServer(IServicesAMS s) {
         server = s;
@@ -96,41 +82,47 @@ public class WindowControllerAMS implements Initializable, NotificationSubscribe
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-            destinationColumn.setCellValueFactory(new PropertyValueFactory<>("destination"));
-            numberOfTicketsColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfTickets"));
-            departureDateColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getDate().toString()));
-            departureTimeColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getTime().toString()));
-            searchNumberOfTickets.setCellValueFactory(new PropertyValueFactory<>("numberOfTickets"));
-            searchHour.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getTime().toString()));
-            addTouristButton.setDisable(true);
-            noSeatsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1, 1));
-            System.out.println("END INIT!!!!!!!!!");
-            receiver.start(this);
+        flightModel = new FlightsListModel();
+        destinationColumn.setCellValueFactory(new PropertyValueFactory<>("destination"));
+        numberOfTicketsColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfTickets"));
+        departureDateColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getDate().toString()));
+        departureTimeColumn.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getTime().toString()));
+        searchNumberOfTickets.setCellValueFactory(new PropertyValueFactory<>("numberOfTickets"));
+        searchHour.setCellValueFactory((data) -> new SimpleStringProperty(data.getValue().getTime().toString()));
+        addTouristButton.setDisable(true);
+        noSeatsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1, 1));
+        System.out.println("END INIT!!!!!!!!!");
+        receiver.start(this);
     }
 
     @Override
-    public void notificationReceived(Notification notification){
+    public void notificationReceived(Notification notification) {
         try {
             System.out.println("Ctrl notificationReceived ... " + notification.getType());
-            SwingUtilities.invokeLater(()->{
+            SwingUtilities.invokeLater(() -> {
                 switch (notification.getType()) {
                     case FLIGHTS_CHANGED: {
-                        Platform.runLater(()->{
-                            if (notification.getFlight()==null){
+                        Flight flight = new Flight(notification.getID(), notification.getDestination(), LocalDateTime.parse(notification.getRandomNumbers()), notification.getAirport(), notification.getNumberOfTickets());
+                        flightModel.changeFlight(flight);
+                        Platform.runLater(() -> {
+                            if (flight == null) {
                                 Util.showWarning("Zboruri", "Zbor inexistent");
                                 return;
                             }
-                            flightTable.getItems().remove(notification.getFlight());
-                            searchTable.getItems().remove(notification.getFlight());
-                            if(notification.getFlight().getNumberOfTickets() > 0){
-                                flightTable.getItems().add(notification.getFlight());
+                            flightTable.getItems().remove(flight);
+                            searchTable.getItems().remove(flight);
+                            if (flight.getNumberOfTickets() > 0) {
+                                flightTable.getItems().add(flight);
                                 flightTable.refresh();
                             }
                         });
                         break;
                     }
-                }});
-        }catch(Exception ex){
+                    default:
+                        System.out.println("Switch notificare caz default");
+                }
+            });
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -141,8 +133,7 @@ public class WindowControllerAMS implements Initializable, NotificationSubscribe
             server.logout(admin);
         } catch (ProjectException e) {
             System.out.println("Logout error " + e);
-        }
-        finally {
+        } finally {
             receiver.stop();
         }
     }
@@ -155,7 +146,7 @@ public class WindowControllerAMS implements Initializable, NotificationSubscribe
 
     public void setUser(Admin admin) {
         this.admin = admin;
-        System.out.println("Logged in as "+ admin.getUsername());
+        System.out.println("Logged in as " + admin.getUsername());
     }
 
     public void findFlights(ActionEvent actionEvent) {
@@ -167,14 +158,14 @@ public class WindowControllerAMS implements Initializable, NotificationSubscribe
         } catch (ProjectException e) {
             e.printStackTrace();
         }
-        for(Flight x: searchTable.getItems()){
+        for (Flight x : searchTable.getItems()) {
             flightTable.getItems().add(x);
         }
         searchTable.getItems().clear();
-        for(Flight x: flights){
+        for (Flight x : flights) {
             searchTable.getItems().add(x);
         }
-        for(Flight x: flights){
+        for (Flight x : flights) {
             flightTable.getItems().remove(x);
         }
     }
@@ -199,8 +190,7 @@ public class WindowControllerAMS implements Initializable, NotificationSubscribe
         }
         try {
             clientAddressTextField.setText(server.findClientByName(clientName).getAddress());
-        }
-        catch (ProjectException e){
+        } catch (ProjectException e) {
             e.printStackTrace();
         }
         addTouristButton.setDisable(false);
@@ -239,7 +229,7 @@ public class WindowControllerAMS implements Initializable, NotificationSubscribe
         }
         String clientName = clientComboBox.getValue();
         if (clientName == null) {
-            Util.showWarning("Numele Clientului","Clientul nu este selectat" );
+            Util.showWarning("Numele Clientului", "Clientul nu este selectat");
             return;
         }
         Flight flight = searchTable.getSelectionModel().getSelectedItem();
@@ -256,9 +246,9 @@ public class WindowControllerAMS implements Initializable, NotificationSubscribe
         Util.showWarning("Succes!", "Rezervarea pentru client a fost facuta cu succes");
     }
 
-    public void addToSearchedFlights(MouseEvent mouseEvent){
+    public void addToSearchedFlights(MouseEvent mouseEvent) {
         Flight flight = flightTable.getSelectionModel().getSelectedItem();
-        if(flight == null){
+        if (flight == null) {
             return;
         }
         searchTable.getItems().add(0, flight);
@@ -277,15 +267,14 @@ public class WindowControllerAMS implements Initializable, NotificationSubscribe
         }
     }
 
-    public void loadClientNames(){
-        try{
-            List<String> clients  =server.getAllClientNames();
+    public void loadClientNames() {
+        try {
+            List<String> clients = server.getAllClientNames();
             clientComboBox.getItems().clear();
-            for(String name : clients){
+            for (String name : clients) {
                 clientComboBox.getItems().add(name);
             }
-        }
-        catch(ProjectException e){
+        } catch (ProjectException e) {
             e.printStackTrace();
         }
     }

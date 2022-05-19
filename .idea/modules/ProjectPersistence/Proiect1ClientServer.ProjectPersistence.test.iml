@@ -13,12 +13,17 @@
     <orderEntry type="module" module-name="Proiect1ClientServer.ProjectModel.main" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.14.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.14.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr353:2.13.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.13.3" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:win:17-ea+11" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:17-ea+11" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:win:17-ea+11" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:17-ea+11" level="project" />
     <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:win:17-ea+11" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.7.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.13.3" level="project" />
+    <orderEntry type="library" name="Gradle: javax.json:javax.json-api:1.1.4" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.13.3" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.platform:junit-platform-commons:1.7.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apiguardian:apiguardian-api:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.opentest4j:opentest4j:1.2.0" level="project" />

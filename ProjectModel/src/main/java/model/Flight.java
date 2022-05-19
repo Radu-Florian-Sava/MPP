@@ -86,7 +86,7 @@ public class Flight implements Identifiable<Integer>, Serializable {
         return "Flight{" +
                 "ID=" + ID +
                 ", destination='" + destination + '\'' +
-                ", dateTime=" + dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) +
+                ", dateTime=" + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")) +
                 ", airport='" + airport + '\'' +
                 ", numberOfTickets=" + numberOfTickets +
                 '}';

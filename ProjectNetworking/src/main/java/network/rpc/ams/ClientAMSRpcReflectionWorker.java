@@ -18,9 +18,6 @@ import java.net.Socket;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Created by grigo on 3/26/16.
- */
 public class ClientAMSRpcReflectionWorker implements Runnable {
     private IServicesAMS server;
     private Socket connection;
